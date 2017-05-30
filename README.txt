@@ -1,2 +1,2 @@
-Ğ¡³ÌĞòËµÃ÷
-	goshipÊÇÒ»¸ö°ËØÔĞ¡ÍæÒâ
+å°ç¨‹åºè¯´æ˜
+	goshipæ˜¯ä¸€ä¸ªå…«å¦å°ç©æ„![image]("https://github.com/luofanrain/gadget/blob/master/img/gossip.png")
