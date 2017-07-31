@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		*{margin: 0;padding: 0;}
+		body{
+			font-size: 14px;color:#660099;font-family: "微软雅黑";background:#99ff666;
+		}
+
+
+	</style>
+</head>
+<body>
+	<canvas align="center" id= "myCanvas" width="450" height="450px" style="border:1px solid #66ff00;background:#66ee00"></canvas>
+</body>
+<script>
+	var c= document.getElementById("myCanvas");
+	var ctx = c.getContext("2d");
+	var width = 15;
+	var speed = 100;
+	var len =5;
+	var f=1;
+	var snakex =[0,1,2,3,4];
+	var snakey =[0,0,0,0,0];
+	var cachex =[0,1,2,3,4];
+	var cachey =[0,0,0,0,0];
+	var food={};
+	var draw = function(){
+		ctx.clearRect(0,0,450,450); 
+		for(var i=0;i<30;i++){
+			ctx.strokeStyle="white";
+			ctx.beginPath();
+			ctx.moveTo(0,i*width)
+			ctx.lineTo(450,i*width)
+			ctx.closePath()
+			ctx.stroke();
+
+			ctx.strokeStyle="white";
+			ctx.beginPath();
+			ctx.moveTo(i*width,0)
+			ctx.lineTo(i*width,450)
+			ctx.closePath();
+			ctx.stroke();
+		}
+	}
+	
+	var initsnake = function(){
+		for(var i = 0;i<len;i++){
+			if(i==len-1){
+				break;
+			}
+			ctx.beginPath();
+			ctx.rect(snakex[i]*15,snakey[i]*15,15,15);
+			ctx.strokeStyle = 'black'; 
+			ctx.stroke();
+			ctx.closePath();
+		}
+		ctx.beginPath();
+		ctx.fillStyle="red";
+		ctx.fillRect(snakex[len-1]*15,snakey[len-1]*15,15,15);
+		ctx.stroke();
+		ctx.closePath();
+	}
+	var initfood = function(){
+		if(food.x){
+			
+		}else{
+		food.x = Math.floor(Math.random()*30);
+		food.y = Math.floor(Math.random()*30);
+		for(var i=0;i<snakex.length;i++){
+			if(snakex[i]===food.x && snakey[i]===food.y){
+				food={};
+				initfood();
+			}
+		}}
+		ctx.beginPath();
+		ctx.fillStyle="yellow";
+		ctx.fillRect(food.x*15,food.y*15,15,15);
+		ctx.closePath();
+		ctx.stroke();
+		
+
+	}
+
+	document.onkeydown = function(e){
+		var code = e.keyCode-38;
+		//-1左 上 0 右1  下2
+		if(Math.abs(code)+Math.abs(f)===2){
+			return;
+		}
+		//console.log(e.keyCode);
+		f=code;
+	}
+	var move = function(){
+		
+		switch(f){
+
+				case 2:snakey[len-1]++;break;
+				case -1:snakex[len-1]--;break;
+				case 0:snakey[len-1]--;break;
+				case 1:snakex[len-1]++;break;
+			}
+		for(var i=0;i<snakex.length-1;i++){
+			snakex[i]=cachex[i+1];
+			snakey[i]=cachey[i+1];
+		}
+		cachex=snakex;
+		cachey=snakey;
+		for(var i=0;i<snakex.length;i++){
+			if(snakex[i]===food.x && snakey[i]===food.y){
+				
+				snakex[len]=snakex[len-1]+1;
+				snakey[len]=food.y;
+				len++;
+				food={};
+				initfood();
+				console.log(snakex);
+				console.log(snakey);
+			}
+		}
+	}
+	var check = function(){
+		if(snakex[len-1]>=30 ||snakex[len-1]<0 || snakey[len-1]>=30 ||snakey[len-1]<0){
+			alert("GAME OVER!");
+			window.location.reload();
+		}
+	}
+	function run(){
+
+		draw();
+		move();
+		initsnake();
+		check();
+		initfood();
+		
+	}
+	
+	window.setInterval("run()",speed);
+</script>
+</html>
