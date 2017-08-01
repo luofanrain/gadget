@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		*{margin: 0;padding: 0;}
+		body{
+			font-size: 14px;color:#660099;font-family: "微软雅黑";background:#99ff666;
+		}
+
+
+	</style>
+</head>
+<body>
+	<canvas align="center" id= "myCanvas" width="450" height="450px" style="border:1px solid #66ff00;background:#66ee00"></canvas>
+</body>
+<script>
+	var c= document.getElementById("myCanvas");
+	var ctx = c.getContext("2d");
+	var head={x:14,y:27};
+	var f = 1;
+	var person=[];
+	var bull = [];
+	var len = 0;
+	var sky = function(){
+			ctx.beginPath();
+			ctx.fillStyle="red";
+			ctx.fillRect(head.x*15,head.y*15,15,15);
+			ctx.fillRect((head.x-1)*15,(head.y+1)*15,15,15);
+			ctx.fillRect((head.x-1)*15,(head.y+2)*15,15,15);
+			ctx.fillRect((head.x)*15,(head.y+1)*15,15,15);
+			ctx.fillRect((head.x+1)*15,(head.y+1)*15,15,15);
+			ctx.fillRect((head.x+1)*15,(head.y+2)*15,15,15);
+			ctx.closePath();
+			ctx.stroke();
+	}
+	//左37,上38,右39,下40
+	//-1左，0上，右1，下2
+	document.onkeydown = function(e){
+		var key = e.keyCode-38;
+		switch(key){
+			case 2: head.y++;break;
+			case 1: head.x++;break;
+			case 0: head.y--;break;
+			case -1: head.x--;break;
+		}
+		draw();
+		if(e.keyCode===87 || e.keyCode===119){
+			bullet();		}
+		
+		
+
+	}
+	var personSky = function(ev){
+			ctx.beginPath();
+			ctx.fillStyle="orange";
+			ctx.fillRect(ev.x*15,ev.y*15,15,15);
+			ctx.fillRect((ev.x-1)*15,(ev.y-1)*15,15,15);
+			ctx.fillRect((ev.x-1)*15,(ev.y-2)*15,15,15);
+			ctx.fillRect((ev.x)*15,(ev.y-1)*15,15,15);
+			ctx.fillRect((ev.x+1)*15,(ev.y-1)*15,15,15);
+			ctx.fillRect((ev.x+1)*15,(ev.y-2)*15,15,15);
+			ctx.closePath();
+			ctx.stroke();
+	}
+
+	var enemy  = function (){
+		for(var i=0;i<5;i++){
+			person[i]={};
+			person[i].x=Math.floor(Math.random()*29);
+			check(i);
+			// console.log(person);
+			person[i].y=2;
+			personSky(person[i]);
+
+		}
+		// console.log(person);
+	}
+
+	var bullet = function (){
+		bull[len]={};
+		bull[len].x=head.x;
+		bull[len].y=head.y;
+		len++;
+	}
+
+	var goup =  function(){
+		for(var i=0;i<len;i++){
+			if(bull[i].y){
+				ctx.beginPath();
+				ctx.fillStyle="white";
+				ctx.fillRect(bull[i].x*15,bull[i].y*15,15,15);
+				ctx.closePath();
+				ctx.stroke();
+				bull[i].y-=1;
+				if(bull[i].y==0){
+					bull[i]={};
+				}
+			}
+		}	
+	}
+
+    var check = function (i){
+   		while(1){
+				for(var j=0;j<=i;j++){
+					if(i!=j){
+						if(Math.abs(person[i].x-person[j].x) < 3){
+							person[i].x=Math.floor(Math.random()*29);
+							break;
+						}
+					}
+				}
+				// console.log(j);
+				if(j===i+1){
+					break;
+				}
+			}
+   	}
+   var draw = function(){
+        ctx.clearRect(0,0,450,450);
+		sky();
+		for(var i=0;i<5;i++){
+			personSky(person[i]);
+		}
+   }
+
+   var boom = function (){
+   		for(var i=0;i<len;i++){
+   			if(bull[i].x){
+	   			for(var j=0;j<5;j++){
+	   				if(bull[i].x===person[j].x && bull[i].y===person[j].y){
+	   					person[j].y=0;
+						person[j].x=Math.floor(Math.random()*29);
+						check(j);
+	   				}
+	   			}
+   			}
+   		}
+   }
+
+	var move = function(){
+		ctx.clearRect(0,0,450,450); 
+		for(var i=0;i<5;i++){
+			person[i].y+=1;
+			if(person[i].y>=30){
+				alert("GAME OVER !");
+				window.location.reload();
+				// person[i].y=0;
+				// person[i].x=Math.floor(Math.random()*29);
+				// check(i);
+			}
+			personSky(person[i]);
+			sky();
+		}
+	}
+	sky();
+	enemy();
+	setInterval("move()",1000);
+	setInterval("goup()",150);
+	setInterval(" boom()",50);
+</script>
+</html>
