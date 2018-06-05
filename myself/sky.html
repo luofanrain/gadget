@@ -6,14 +6,38 @@
 	<style>
 		*{margin: 0;padding: 0;}
 		body{
-			font-size: 14px;color:#660099;font-family: "微软雅黑";background:#99ff666;
+			position: absolute;
+			left:50%;
+			top:50%;
+			margin-top: -225px;
+			margin-left: -450px;
+			font-size: 14px;
+			color:#660099;
+			font-family: "微软雅黑";
+			background:#99ff666;
 		}
+		.detail{
+			position: absolute;
+			left:50%;
+			top:50%;
+			margin-top: -225px;
+			margin-left: 225px;
+			height:450px;
+			width:450px;
+			border:1px solid gray;
+			line-height: 450px;
+			text-align: center;
+		}
+
 
 
 	</style>
 </head>
 <body>
 	<canvas align="center" id= "myCanvas" width="450" height="450px" style="border:1px solid #66ff00;background:#66ee00"></canvas>
+	<div class="detail">
+		↑:上,↓:下,←:左,→右,w:发子弹
+	</div>
 </body>
 <script>
 	var c= document.getElementById("myCanvas");
@@ -40,14 +64,15 @@
 	document.onkeydown = function(e){
 		var key = e.keyCode-38;
 		switch(key){
-			case 2: head.y++;break;
-			case 1: head.x++;break;
-			case 0: head.y--;break;
-			case -1: head.x--;break;
+			case 2: head.y>=27?27:head.y++;break;
+			case 1: head.x>27?27:head.x++;break;
+			case 0: head.y<1?1:head.y--;break;
+			case -1: head.x<2?2:head.x--;break;
 		}
 		draw();
 		if(e.keyCode===87 || e.keyCode===119){
-			bullet();		}
+			bullet();		
+		}
 		
 		
 
@@ -68,7 +93,7 @@
 	var enemy  = function (){
 		for(var i=0;i<5;i++){
 			person[i]={};
-			person[i].x=Math.floor(Math.random()*29);
+			person[i].x=Math.floor(Math.random()*26)+3;
 			check(i);
 			// console.log(person);
 			person[i].y=2;
@@ -106,7 +131,7 @@
 				for(var j=0;j<=i;j++){
 					if(i!=j){
 						if(Math.abs(person[i].x-person[j].x) < 3){
-							person[i].x=Math.floor(Math.random()*29);
+							person[i].x=Math.floor(Math.random()*26)+3;
 							break;
 						}
 					}
@@ -131,7 +156,7 @@
 	   			for(var j=0;j<5;j++){
 	   				if(bull[i].x===person[j].x && bull[i].y===person[j].y){
 	   					person[j].y=0;
-						person[j].x=Math.floor(Math.random()*29);
+						person[j].x=Math.floor(Math.random()*26)+3;
 						check(j);
 	   				}
 	   			}
@@ -144,19 +169,26 @@
 		for(var i=0;i<5;i++){
 			person[i].y+=1;
 			if(person[i].y>=30){
-				alert("GAME OVER !");
-				window.location.reload();
+				clearInterval(over);
+
+				break;
+
 				// person[i].y=0;
 				// person[i].x=Math.floor(Math.random()*29);
 				// check(i);
 			}
+
 			personSky(person[i]);
 			sky();
+		}
+		if(i<5){			
+			alert("GAME OVER !");
+			window.location.reload();
 		}
 	}
 	sky();
 	enemy();
-	setInterval("move()",1000);
+	over = setInterval("move()",1000);
 	setInterval("goup()",150);
 	setInterval(" boom()",50);
 </script>

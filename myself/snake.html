@@ -6,14 +6,38 @@
 	<style>
 		*{margin: 0;padding: 0;}
 		body{
-			font-size: 14px;color:#660099;font-family: "微软雅黑";background:#99ff666;
+			position: absolute;
+			left:50%;
+			top:50%;
+			margin-top: -225px;
+			margin-left: -450px;
+			font-size: 14px;
+			color:#660099;
+			font-family: "微软雅黑";
+			background:#99ff666;
 		}
+		.detail{
+			position: absolute;
+			left:50%;
+			top:50%;
+			margin-top: -225px;
+			margin-left: 225px;
+			height:450px;
+			width:450px;
+			border:1px solid gray;
+			line-height: 450px;
+			text-align: center;
+		}
+
 
 
 	</style>
 </head>
 <body>
 	<canvas align="center" id= "myCanvas" width="450" height="450px" style="border:1px solid #66ff00;background:#66ee00"></canvas>
+	<div class="detail">
+		↑:上,↓:下,←:左,→右,space:暂停,上下左右继续
+	</div>
 </body>
 <script>
 	var c= document.getElementById("myCanvas");
